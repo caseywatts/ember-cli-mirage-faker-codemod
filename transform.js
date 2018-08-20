@@ -3,17 +3,30 @@
 export default function transformer(file, api) {
   const j = api.jscodeshift;
 
-  return j(file.source)
-    .find(j.ImportSpecifier)
-    .forEach(path => {
-      if (isImportingFaker(path) && isImportingFromEmberCliMirage(path)) {
-        removeSpecifierOrImportDeclaration(path)
+  return maybeInsertFaker(removeOldFaker(file.source));
 
-        // next: add in the correct import
-      }
-    })
-    .toSource();
+  function maybeInsertFaker(source) {
+    return j(source)
+      .find(j.ImportSpecifier)
+      .forEach(path => {
+        console.log(path)
+      })
+      .toSource();
+  }
 
+  function removeOldFaker(source) {
+    return j(source)
+      .find(j.ImportSpecifier)
+      .forEach(path => {
+        if (isImportingFaker(path) && isImportingFromEmberCliMirage(path)) {
+          removeSpecifierOrImportDeclaration(path)
+
+
+          // next: add in the correct import
+        }
+      })
+      .toSource();
+  }
 
   function isImportingFaker(path) {
     return path.node.imported.name === "faker"
