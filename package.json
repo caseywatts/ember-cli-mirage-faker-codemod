@@ -1,0 +1,19 @@
+{
+  "name": "ember-cli-mirage-faker-codemod",
+  "version": "1.0.0",
+  "description": "",
+  "main": "transform.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "babel": "^6.23.0",
+    "jest": "^23.5.0",
+    "jscodeshift": "^0.5.1"
+  },
+  "devDependencies": {
+    "babel-preset-env": "^1.7.0"
+  }
+}
