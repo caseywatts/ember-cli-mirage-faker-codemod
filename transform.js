@@ -2,14 +2,16 @@
 
 export default function transformer(file, api) {
   const j = api.jscodeshift;
-
+console.log(removeOldFaker(file.source))
   return maybeInsertFaker(removeOldFaker(file.source));
 
   function maybeInsertFaker(source) {
     return j(source)
-      .find(j.ImportSpecifier)
+      .find(j.ImportDeclaration)
       .forEach(path => {
-        console.log(path)
+        if (isImportingFromFaker(path)) {
+          //add faker to specifiers in path.node.specifiers if not already present
+        }
       })
       .toSource();
   }
@@ -20,9 +22,6 @@ export default function transformer(file, api) {
       .forEach(path => {
         if (isImportingFaker(path) && isImportingFromEmberCliMirage(path)) {
           removeSpecifierOrImportDeclaration(path)
-
-
-          // next: add in the correct import
         }
       })
       .toSource();
@@ -30,6 +29,10 @@ export default function transformer(file, api) {
 
   function isImportingFaker(path) {
     return path.node.imported.name === "faker"
+  }
+
+  function isImportingFromFaker(path) {
+    return path.node.source.value === "faker"
   }
 
   function isImportingFromEmberCliMirage(path) {
@@ -42,7 +45,7 @@ export default function transformer(file, api) {
 
   function removeSpecifierOrImportDeclaration(path) {
     if (isOnlySpecifierInImportDeclaration(path)) {
-      j(path.parent.parent).remove(); // remove entire import declaration
+      j(path.parent).remove(); // remove entire import declaration
     } else {
       j(path).remove(); // remove just the one specifier
     }
