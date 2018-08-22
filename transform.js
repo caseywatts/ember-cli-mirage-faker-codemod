@@ -1,8 +1,5 @@
-// Press ctrl+space for code completion
-
 export default function transformer(file, api) {
   const j = api.jscodeshift;
-console.log(removeOldFaker(file.source))
   return maybeInsertFaker(removeOldFaker(file.source));
 
   function maybeInsertFaker(source) {
@@ -51,6 +48,3 @@ console.log(removeOldFaker(file.source))
     }
   }
 }
-
-
-// defineInlineTest(transform, {}, "import { faker } from 'ember-cli-mirage';", 'expected output', 'test name (optional)');
