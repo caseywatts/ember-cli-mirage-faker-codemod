@@ -1,35 +1,44 @@
 export default function transformer(file, api) {
   const j = api.jscodeshift;
   const root = j(file.source)
+  const getFirstPath = () => root.find(j.Program).get('body', 0);
 
-  removeOldFaker(root);
-  maybeInsertFaker(root);
-  // chainLevelThree(root);
+  const hasAnyFakerImports = true;
 
-  return root.toSource();
+  if (hasAnyFakerImports) {
+    insertNewFaker(root);
+    removeOldFaker(root);
+  }
+
+  return root.toSource({quote: 'single'});
 
 
 
-  // function chainLevelThree(root) {
-  //   return root
-  //     .find(j.Program)
-  //     .forEach(path => {
-  //       j(path.node.body[0]).insertBefore(standardFakerImport())
-  //     })
-  //     .toSource({quote: 'single'})
-  // }
-  //
-  function maybeInsertFaker(root) {
-    return root
+  function insertNewFaker(root) {
+    root
       .find(j.ImportDeclaration)
       .forEach(path => {
         if (isAlreadyImportingSomethingFromFaker(path)) {
-          path.insertAfter(standardFakerImport())
+          insertFakerAtTop()
+          // this should be inserting into, not inserting after
         } else {
-          path.insertAfter(standardFakerImport())
+          insertFakerAtTop()
         }
       })
-      .toSource({quote: 'single'});
+  }
+
+  function removeOldFaker(root) {
+    root
+      .find(j.ImportSpecifier)
+      .forEach(path => {
+        if (isImportingFaker(path) && isImportingFromEmberCliMirage(path)) {
+          removeSpecifierOrImportDeclaration(path)
+        }
+      })
+  }
+
+  function insertFakerAtTop(root) {
+    j(getFirstPath()).insertBefore(standardFakerImport())
   }
 
   function standardFakerImport() {
@@ -39,17 +48,6 @@ export default function transformer(file, api) {
       ],
       j.literal('faker')
     );
-  }
-
-  function removeOldFaker(root) {
-    return root
-      .find(j.ImportSpecifier)
-      .forEach(path => {
-        if (isImportingFaker(path) && isImportingFromEmberCliMirage(path)) {
-          removeSpecifierOrImportDeclaration(path)
-        }
-      })
-      .toSource({quote: 'single'});
   }
 
   function isImportingFaker(path) {
