@@ -6,28 +6,22 @@ export default function transformer(file, api) {
     return j(source)
       .find(j.ImportDeclaration)
       .forEach(path => {
-        if (isImportingFromFaker(path)) {
-          path.insertAfter(j.importDeclaration(
-            [j.importSpecifier(j.identifier("x")), j.importSpecifier(j.identifier("faker"))], j.literal('faker'))
-          )
-          // j(path.parent.node).insertAfter(j.importDeclaration(
-          //   [j.importDefaultSpecifier(j.identifier("foo"))], j.literal("bar"),
-          //   "type")
-          // )
-
-          // path.node.insertAfter(j.importDeclaration({
-          //   specifiers: j.importSpecifier({
-          //     imported: j.identifier({
-          //       name: 'faker',
-          //       type: 'ImportSpecifier'
-          //     })
-          //   }),
-          //   source: 'faker',
-          // }))
-          //add faker to specifiers in path.node.specifiers if not already present
+        if (isAlreadyImportingSomethingFromFaker(path)) {
+          path.insertAfter(standardFakerImport())
+        } else {
+          path.insertAfter(standardFakerImport())
         }
       })
-      .toSource();
+      .toSource({quote: 'single'});
+  }
+
+  function standardFakerImport() {
+    return j.importDeclaration(
+      [
+        j.importSpecifier(j.identifier("faker"))
+      ],
+      j.literal('faker')
+    );
   }
 
   function removeOldFaker(source) {
@@ -45,7 +39,7 @@ export default function transformer(file, api) {
     return path.node.imported.name === "faker"
   }
 
-  function isImportingFromFaker(path) {
+  function isAlreadyImportingSomethingFromFaker(path) {
     return path.node.source.value === "faker"
   }
 
