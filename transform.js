@@ -4,15 +4,32 @@ export default function transformer(file, api) {
   const getFirstPath = () => root.find(j.Program).get('body', 0);
 
   const hasAnyFakerImports = true;
+  const importsAnythingFromFakerAlready = true;
 
-  if (hasAnyFakerImports) {
-    insertNewFaker(root);
+  if (hasAnyFakerImports) {  // if faker isn't used in this file, skip it
+    if (importsAnythingFromFakerAlready) {
+      findAndInsertFaker(root);
+    } else {
+      insertFakerAtTop(root);
+    }
     removeOldFaker(root);
   }
 
   return root.toSource({quote: 'single'});
 
-
+  function findAndInsertFaker(root) {
+    root
+    .find(j.ImportSpecifier)
+    .forEach(path => {
+      if (isImportingFromFaker(path)) {
+        if (isImportingFaker(path)) {
+          // noop
+        } else {
+          insertSpecifier(path)
+        }
+      }
+    })
+  }
 
   function insertNewFaker(root) {
     root
@@ -62,6 +79,10 @@ export default function transformer(file, api) {
     return path.parent.node.source.value === "ember-cli-mirage"
   }
 
+  function isImportingFromFaker(path) {
+    return path.parent.node.source.value === "faker"
+  }
+
   function isOnlySpecifierInImportDeclaration(path) {
     return path.parent.node.specifiers.length === 1
   }
@@ -72,5 +93,11 @@ export default function transformer(file, api) {
     } else {
       j(path).remove(); // remove just the one specifier
     }
+  }
+
+  function insertSpecifier(path) {
+    path.parent.get('specifiers').push(
+      j.importSpecifier(j.identifier("faker"))
+    )
   }
 }
