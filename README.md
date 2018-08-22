@@ -8,3 +8,9 @@ If this is your first codemod (it's mine!), I suggest reading these two:
 For an example of another Ember-related codemod that has a similar structure, check out:
 
 - [ember-modules-codemod](https://github.com/ember-cli/ember-modules-codemod)
+
+## Development Setup
+
+- clone repo
+- `npm install`
+- `npm test`
