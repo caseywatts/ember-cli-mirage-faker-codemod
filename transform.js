@@ -3,11 +3,8 @@ export default function transformer(file, api) {
   const root = j(file.source)
   const getFirstPath = () => root.find(j.Program).get('body', 0);
 
-  const hasAnyFakerImports = true;
-  const importsAnythingFromFakerAlready = true;
-
-  if (hasAnyFakerImports) {  // if faker isn't used in this file, skip it
-    if (importsAnythingFromFakerAlready) {
+  if (hasAnyFakerImports(root)) {  // if faker isn't used in this file, skip it
+    if (importsAnythingFromFakerAlready(root)) {
       findAndInsertFaker(root);
     } else {
       insertFakerAtTop(root);
@@ -17,11 +14,28 @@ export default function transformer(file, api) {
 
   return root.toSource({quote: 'single'});
 
+
+  function importsAnythingFromFakerAlready(root) {
+    return root
+    .find(j.ImportDeclaration)
+    .some(path => {
+      return isImportingFromFaker(path)
+    })
+  }
+
+  function hasAnyFakerImports(root) {
+    return root
+    .find(j.ImportSpecifier)
+    .some(path => {
+      return isImportingFaker(path)
+    })
+  };
+
   function findAndInsertFaker(root) {
     root
     .find(j.ImportSpecifier)
     .forEach(path => {
-      if (isImportingFromFaker(path)) {
+      if (isImportingFromFaker(path.parent)) {
         if (isImportingFaker(path)) {
           // noop
         } else {
@@ -48,7 +62,7 @@ export default function transformer(file, api) {
     root
       .find(j.ImportSpecifier)
       .forEach(path => {
-        if (isImportingFaker(path) && isImportingFromEmberCliMirage(path)) {
+        if (isImportingFaker(path) && isImportingFromEmberCliMirage(path.parent)) {
           removeSpecifierOrImportDeclaration(path)
         }
       })
@@ -76,19 +90,19 @@ export default function transformer(file, api) {
   }
 
   function isImportingFromEmberCliMirage(path) {
-    return path.parent.node.source.value === "ember-cli-mirage"
+    return path.node.source.value === "ember-cli-mirage"
   }
 
   function isImportingFromFaker(path) {
-    return path.parent.node.source.value === "faker"
+    return path.node.source.value === "faker"
   }
 
   function isOnlySpecifierInImportDeclaration(path) {
-    return path.parent.node.specifiers.length === 1
+    return path.node.specifiers.length === 1
   }
 
   function removeSpecifierOrImportDeclaration(path) {
-    if (isOnlySpecifierInImportDeclaration(path)) {
+    if (isOnlySpecifierInImportDeclaration(path.parent)) {
       j(path.parent).remove(); // remove entire import declaration
     } else {
       j(path).remove(); // remove just the one specifier
