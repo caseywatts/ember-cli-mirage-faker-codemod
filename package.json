@@ -2,18 +2,21 @@
   "name": "ember-cli-mirage-faker-codemod",
   "version": "1.0.0",
   "description": "",
-  "main": "transform.js",
+  "bin": "./bin/cli.js",
   "scripts": {
-    "test": "jest"
+    "test": "codemod-cli test",
+    "update-docs": "codemod-cli update-docs"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "babel": "^6.23.0",
-    "jest": "^23.5.0",
-    "jscodeshift": "^0.5.1"
+    "codemod-cli": "^0.2.6"
   },
   "devDependencies": {
-    "babel-preset-env": "^1.7.0"
+    "babel-preset-env": "^1.7.0",
+    "jest": "^23.1.0"
+  },
+  "jest": {
+    "testEnvironment": "node"
   }
 }
