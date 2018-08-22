@@ -7,6 +7,23 @@ export default function transformer(file, api) {
       .find(j.ImportDeclaration)
       .forEach(path => {
         if (isImportingFromFaker(path)) {
+          path.insertAfter(j.importDeclaration(
+            [j.importSpecifier(j.identifier("x")), j.importSpecifier(j.identifier("faker"))], j.literal('faker'))
+          )
+          // j(path.parent.node).insertAfter(j.importDeclaration(
+          //   [j.importDefaultSpecifier(j.identifier("foo"))], j.literal("bar"),
+          //   "type")
+          // )
+
+          // path.node.insertAfter(j.importDeclaration({
+          //   specifiers: j.importSpecifier({
+          //     imported: j.identifier({
+          //       name: 'faker',
+          //       type: 'ImportSpecifier'
+          //     })
+          //   }),
+          //   source: 'faker',
+          // }))
           //add faker to specifiers in path.node.specifiers if not already present
         }
       })
