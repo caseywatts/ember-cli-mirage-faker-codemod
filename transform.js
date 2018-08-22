@@ -1,9 +1,26 @@
 export default function transformer(file, api) {
   const j = api.jscodeshift;
-  return maybeInsertFaker(removeOldFaker(file.source));
+  const root = j(file.source)
 
-  function maybeInsertFaker(source) {
-    return j(source)
+  removeOldFaker(root);
+  maybeInsertFaker(root);
+  // chainLevelThree(root);
+
+  return root.toSource();
+
+
+
+  // function chainLevelThree(root) {
+  //   return root
+  //     .find(j.Program)
+  //     .forEach(path => {
+  //       j(path.node.body[0]).insertBefore(standardFakerImport())
+  //     })
+  //     .toSource({quote: 'single'})
+  // }
+  //
+  function maybeInsertFaker(root) {
+    return root
       .find(j.ImportDeclaration)
       .forEach(path => {
         if (isAlreadyImportingSomethingFromFaker(path)) {
@@ -24,15 +41,15 @@ export default function transformer(file, api) {
     );
   }
 
-  function removeOldFaker(source) {
-    return j(source)
+  function removeOldFaker(root) {
+    return root
       .find(j.ImportSpecifier)
       .forEach(path => {
         if (isImportingFaker(path) && isImportingFromEmberCliMirage(path)) {
           removeSpecifierOrImportDeclaration(path)
         }
       })
-      .toSource();
+      .toSource({quote: 'single'});
   }
 
   function isImportingFaker(path) {
