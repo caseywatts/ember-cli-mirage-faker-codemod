@@ -4,7 +4,8 @@
   "description": "",
   "main": "transform.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "codemod": "jscodeshift -t transform.js"
   },
   "author": "",
   "license": "ISC",
