@@ -1,6 +1,6 @@
 {
   "name": "ember-cli-mirage-faker-codemod",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "main": "transform.js",
   "bin": "./bin/cli",
