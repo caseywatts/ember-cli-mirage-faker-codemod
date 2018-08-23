@@ -3,9 +3,11 @@ This codemod is to help transition from importing `faker` through `ember-cli-mir
 
 ## Running the script
 
-- `npx ember-cli-mirage-faker-codemod path/to/directories/or/files/you/want`
+### Option 1
+- `npm install -g jscodeshift` in case you have an older version around
+- `jscodeshift -t https://raw.githubusercontent.com/caseywatts/ember-cli-mirage-faker-codemod/master/transform.js path/to/directories/or/files/you/want`
 
-or, 'from source'
+### Option 2
 
 - `git clone https://github.com/caseywatts/ember-cli-mirage-faker-codemod`
 - `cd ember-cli-mirage-faker-codemod`
