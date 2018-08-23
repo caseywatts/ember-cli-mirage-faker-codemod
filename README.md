@@ -4,10 +4,10 @@ For more background on the situation, see [this github issue](https://github.com
 
 
 ## Running the script
-Replace `path/to/directories/or/files/you/want` with `./tests` and any other files you want to run through this. Then you can `git add -p` the parts that are useful.
+The example will run the codemod on all files in the `./tests` folder. Then selectively check in as many changes as you'd like to keep (try `git add -p`!).
 
 - `npm install -g jscodeshift`
-- `jscodeshift -t https://raw.githubusercontent.com/caseywatts/ember-cli-mirage-faker-codemod/master/transform.js path/to/directories/or/files/you/want`
+- `jscodeshift -t https://raw.githubusercontent.com/caseywatts/ember-cli-mirage-faker-codemod/master/transform.js ./tests`
 
 
 ### Development
