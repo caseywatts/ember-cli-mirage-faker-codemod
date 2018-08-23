@@ -1,9 +1,11 @@
 {
   "name": "ember-cli-mirage-faker-codemod",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "",
   "main": "transform.js",
-  "bin": "./bin/ember-cli-mirage-faker-codemod",
+  "bin": {
+    "ember-cli-mirage-faker-codemod": "./bin/ember-cli-mirage-faker-codemod"
+  },
   "scripts": {
     "test": "jest",
     "codemod": "jscodeshift -t transform.js"
