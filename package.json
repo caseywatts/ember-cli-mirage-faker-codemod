@@ -4,7 +4,7 @@
   "description": "",
   "main": "transform.js",
   "bin": {
-    "ember-cli-mirage-faker-codemod": "./bin/cli",
+    "ember-cli-mirage-faker-codemod": "./bin/cli"
   },
   "scripts": {
     "test": "jest",
