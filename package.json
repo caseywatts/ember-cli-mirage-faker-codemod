@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "transform.js",
+  "bin": "./bin/cli",
   "scripts": {
     "test": "jest",
     "codemod": "jscodeshift -t transform.js"
