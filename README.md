@@ -22,11 +22,21 @@ npm run codemod path/to/directories/or/files/you/want
 
 ## Codemod Background Reading
 
-If this is your first codemod (it's mine!), I suggest reading these two:
+If this is your first codemod (it's mine!), here are some helpful references & resources.
 
-1. Intro to start making a codemod for a js library, and many tips for how to use the [AST explorer tool](https://astexplorer.net/): https://vramana.github.io/blog/2015/12/21/codemod-tutorial/
-2. Test setup documentation in the [jscodeshift repo](https://github.com/facebook/jscodeshift#unit-testing)
-
-For an example of another Ember-related codemod that has a similar structure, check out:
-
-- [ember-modules-codemod](https://github.com/ember-cli/ember-modules-codemod)
+1. Intro Articles
+  - Intro to start making a codemod for a js library, and many tips for how to use the [AST explorer tool](https://astexplorer.net/): https://vramana.github.io/blog/2015/12/21/codemod-tutorial/
+  - This is the original article that explains the structure of jscodeshift and how it was designed https://medium.com/@cpojer/effective-javascript-codemods-5a6686bb46fb
+1. Documentation
+  - jscodeshift documentation is in the [source files](https://github.com/facebook/jscodeshift/tree/master/src) or you can view them as jsdocs (see [my pull request](https://github.com/facebook/jscodeshift/pull/272) for how)
+  - AST type function signatures are documented in the [ast-types](https://github.com/benjamn/ast-types) repo (the `def` folder).
+  - The [`recast` documentation](https://github.com/benjamn/recast) goes through path vs node pretty well
+1. Development Tips
+  - Test setup documentation in the [jscodeshift repo](https://github.com/facebook/jscodeshift#unit-testing)
+  - To automate test setup (and for npx setup), try [codemod-cli](https://github.com/rwjblue/codemod-cli)
+  - For sharing your codemod, there are many options, from `npx` to running it with githubusercontent. See [my gist about the options](https://gist.github.com/caseywatts/b8fffb51180fe44cd3706407d61150a3)
+1. More Resources
+  - this "[recipe](https://github.com/facebook/jscodeshift/blob/master/recipes/retain-first-comment.md)" from the jscodeshift repo
+  - [ember-modules-codemod](https://github.com/ember-cli/ember-modules-codemod)
+  - [ember-qunit-codemod](https://github.com/rwjblue/ember-qunit-codemod)
+  - For examples of other codemods, articles, and related tools, check out [awesome jscodeshift](https://github.com/sejoker/awesome-jscodeshift)
