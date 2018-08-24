@@ -19,29 +19,21 @@ export default function transformer (file, api) {
   function importsAnythingFromFakerAlready (root) {
     return root
       .find(j.ImportDeclaration)
-      .some(path => {
-        return isImportingFromFaker(path)
-      })
+      .some(isImportingFromFaker)
   }
 
   function hasAnyFakerImports (root) {
     return root
       .find(j.ImportSpecifier)
-      .some(path => {
-        return isImportingFaker(path)
-      })
+      .some(isImportingFaker)
   }
 
   // manipulations
   function findAndInsertFaker (root) {
     root
       .find(j.ImportDeclaration)
-      .filter(path => {
-        return isImportingFromFaker(path)
-      })
-      .forEach(path => {
-        insertSpecifier(path)
-      })
+      .filter(isImportingFromFaker)
+      .forEach(insertSpecifier)
   }
 
   function insertFakerAfterMirage (root) {
