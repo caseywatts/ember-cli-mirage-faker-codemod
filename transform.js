@@ -7,7 +7,7 @@ export default function transformer(file, api) {
     if (importsAnythingFromFakerAlready(root)) {
       findAndInsertFaker(root);
     } else {
-      insertFakerAtTop(root);
+      insertFakerAfterMirage(root);
     }
     removeOldFaker(root);
   }
@@ -66,6 +66,15 @@ export default function transformer(file, api) {
           removeSpecifierOrImportDeclaration(path)
         }
       })
+  }
+
+  function insertFakerAfterMirage(root) {
+    root
+      .find(j.ImportDeclaration)
+      .filter(path => {
+        return path.node.source.value === 'ember-cli-mirage'
+      })
+      .insertAfter(standardFakerImport());
   }
 
   function insertFakerAtTop(root) {
