@@ -1,66 +1,63 @@
-export default function transformer(file, api) {
+export default function transformer (file, api) {
   // setup
-  const j = api.jscodeshift;
+  const j = api.jscodeshift
   const root = j(file.source)
-  const getFirstPath = () => root.find(j.Program).get('body', 0);
-
+  const getFirstPath = () => root.find(j.Program).get('body', 0)
 
   // "main"
-  if (hasAnyFakerImports(root)) {  // if faker isn't used in this file, skip it
+  if (hasAnyFakerImports(root)) { // if faker isn't used in this file, skip it
     if (importsAnythingFromFakerAlready(root)) {
-      findAndInsertFaker(root);
+      findAndInsertFaker(root)
     } else {
-      insertFakerAfterMirage(root);
+      insertFakerAfterMirage(root)
     }
-    removeOldFaker(root);
+    removeOldFaker(root)
   }
 
-  return root.toSource({quote: 'single'});
-
+  return root.toSource({quote: 'single'})
 
   // global checks
-  function importsAnythingFromFakerAlready(root) {
+  function importsAnythingFromFakerAlready (root) {
     return root
-    .find(j.ImportDeclaration)
-    .some(path => {
-      return isImportingFromFaker(path)
-    })
+      .find(j.ImportDeclaration)
+      .some(path => {
+        return isImportingFromFaker(path)
+      })
   }
 
-  function hasAnyFakerImports(root) {
+  function hasAnyFakerImports (root) {
     return root
-    .find(j.ImportSpecifier)
-    .some(path => {
-      return isImportingFaker(path)
-    })
-  };
-
+      .find(j.ImportSpecifier)
+      .some(path => {
+        return isImportingFaker(path)
+      })
+  }
 
   // manipulations
-  function findAndInsertFaker(root) {
+  function findAndInsertFaker (root) {
     root
-    .find(j.ImportSpecifier)
-    .forEach(path => {
-      if (isImportingFromFaker(path.parent)) {
-        if (isImportingFaker(path)) {
+      .find(j.ImportSpecifier)
+      .forEach(path => {
+        if (isImportingFromFaker(path.parent)) {
+          if (isImportingFaker(path)) {
           // noop
-        } else {
-          insertSpecifier(path)
+          } else {
+            insertSpecifier(path)
+          }
         }
-      }
-    })
+      })
   }
 
-  function insertFakerAfterMirage(root) {
+  function insertFakerAfterMirage (root) {
     root
       .find(j.ImportDeclaration)
       .filter(path => {
         return path.node.source.value === 'ember-cli-mirage'
       })
-      .insertAfter(standardFakerImport());
+      .insertAfter(standardFakerImport())
   }
 
-  function removeOldFaker(root) {
+  function removeOldFaker (root) {
     root
       .find(j.ImportSpecifier)
       .forEach(path => {
@@ -70,52 +67,49 @@ export default function transformer(file, api) {
       })
   }
 
-
   // node generation
-  function standardFakerImport() {
+  function standardFakerImport () {
     return j.importDeclaration(
       [
-        j.importSpecifier(j.identifier("faker"))
+        j.importSpecifier(j.identifier('faker'))
       ],
       j.literal('faker')
-    );
+    )
   }
-
 
   // node checks
-  function isImportingFaker(path) {
-    return path.node.imported.name === "faker"
+  function isImportingFaker (path) {
+    return path.node.imported.name === 'faker'
   }
 
-  function isAlreadyImportingSomethingFromFaker(path) {
-    return path.node.source.value === "faker"
+  function isAlreadyImportingSomethingFromFaker (path) {
+    return path.node.source.value === 'faker'
   }
 
-  function isImportingFromEmberCliMirage(path) {
-    return path.node.source.value === "ember-cli-mirage"
+  function isImportingFromEmberCliMirage (path) {
+    return path.node.source.value === 'ember-cli-mirage'
   }
 
-  function isImportingFromFaker(path) {
-    return path.node.source.value === "faker"
+  function isImportingFromFaker (path) {
+    return path.node.source.value === 'faker'
   }
 
-  function isOnlySpecifierInImportDeclaration(path) {
+  function isOnlySpecifierInImportDeclaration (path) {
     return path.node.specifiers.length === 1
   }
 
-
   // general utility
-  function removeSpecifierOrImportDeclaration(path) {
+  function removeSpecifierOrImportDeclaration (path) {
     if (isOnlySpecifierInImportDeclaration(path.parent)) {
-      j(path.parent).remove(); // remove entire import declaration
+      j(path.parent).remove() // remove entire import declaration
     } else {
-      j(path).remove(); // remove just the one specifier
+      j(path).remove() // remove just the one specifier
     }
   }
 
-  function insertSpecifier(path) {
+  function insertSpecifier (path) {
     path.parent.get('specifiers').push(
-      j.importSpecifier(j.identifier("faker"))
+      j.importSpecifier(j.identifier('faker'))
     )
   }
 }
