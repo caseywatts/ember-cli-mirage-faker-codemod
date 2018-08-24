@@ -33,7 +33,9 @@ export default function transformer (file, api) {
     root
       .find(j.ImportDeclaration)
       .filter(isImportingFromFaker)
-      .forEach(insertFakerSpecifier)
+      .forEach(path => {
+        insertSpecifier(path, fakerSpecifier())
+      })
   }
 
   function insertFakerAfterMirage (root) {
@@ -53,10 +55,6 @@ export default function transformer (file, api) {
           removeSpecifierOrImportDeclaration(path)
         }
       })
-  }
-
-  function insertFakerSpecifier (path) {
-    insertSpecifier(path, fakerSpecifier())
   }
 
   // node generation
