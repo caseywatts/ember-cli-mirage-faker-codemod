@@ -45,19 +45,6 @@ export default function transformer(file, api) {
     })
   }
 
-  function insertNewFaker(root) {
-    root
-      .find(j.ImportDeclaration)
-      .forEach(path => {
-        if (isAlreadyImportingSomethingFromFaker(path)) {
-          insertFakerAtTop()
-          // this should be inserting into, not inserting after
-        } else {
-          insertFakerAtTop()
-        }
-      })
-  }
-
   function removeOldFaker(root) {
     root
       .find(j.ImportSpecifier)
@@ -75,10 +62,6 @@ export default function transformer(file, api) {
         return path.node.source.value === 'ember-cli-mirage'
       })
       .insertAfter(standardFakerImport());
-  }
-
-  function insertFakerAtTop(root) {
-    j(getFirstPath()).insertBefore(standardFakerImport())
   }
 
   function standardFakerImport() {
