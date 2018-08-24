@@ -59,10 +59,14 @@ export default function transformer (file, api) {
   function standardFakerImport () {
     return j.importDeclaration(
       [
-        j.importSpecifier(j.identifier('faker'))
+        fakerSpecifier()
       ],
       j.literal('faker')
     )
+  }
+
+  function fakerSpecifier () {
+    return j.importSpecifier(j.identifier('faker'))
   }
 
   // node checks
@@ -92,8 +96,6 @@ export default function transformer (file, api) {
   }
 
   function insertSpecifier (path) {
-    path.get('specifiers').push(
-      j.importSpecifier(j.identifier('faker'))
-    )
+    path.get('specifiers').push(fakerSpecifier())
   }
 }
