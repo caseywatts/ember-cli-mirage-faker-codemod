@@ -2,7 +2,6 @@ export default function transformer (file, api) {
   // setup
   const j = api.jscodeshift
   const root = j(file.source)
-  const getFirstPath = () => root.find(j.Program).get('body', 0)
 
   // "main"
   if (hasAnyFakerImports(root)) { // if faker isn't used in this file, skip it
@@ -80,10 +79,6 @@ export default function transformer (file, api) {
   // node checks
   function isImportingFaker (path) {
     return path.node.imported.name === 'faker'
-  }
-
-  function isAlreadyImportingSomethingFromFaker (path) {
-    return path.node.source.value === 'faker'
   }
 
   function isImportingFromEmberCliMirage (path) {
