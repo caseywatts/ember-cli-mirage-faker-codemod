@@ -35,15 +35,12 @@ export default function transformer (file, api) {
   // manipulations
   function findAndInsertFaker (root) {
     root
-      .find(j.ImportSpecifier)
+      .find(j.ImportDeclaration)
+      .filter(path => {
+        return isImportingFromFaker(path)
+      })
       .forEach(path => {
-        if (isImportingFromFaker(path.parent)) {
-          if (isImportingFaker(path)) {
-          // noop
-          } else {
-            insertSpecifier(path)
-          }
-        }
+        insertSpecifier(path)
       })
   }
 
@@ -103,7 +100,7 @@ export default function transformer (file, api) {
   }
 
   function insertSpecifier (path) {
-    path.parent.get('specifiers').push(
+    path.get('specifiers').push(
       j.importSpecifier(j.identifier('faker'))
     )
   }
