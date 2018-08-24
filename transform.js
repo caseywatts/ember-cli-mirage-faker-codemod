@@ -1,8 +1,11 @@
 export default function transformer(file, api) {
+  // setup
   const j = api.jscodeshift;
   const root = j(file.source)
   const getFirstPath = () => root.find(j.Program).get('body', 0);
 
+
+  // "main"
   if (hasAnyFakerImports(root)) {  // if faker isn't used in this file, skip it
     if (importsAnythingFromFakerAlready(root)) {
       findAndInsertFaker(root);
@@ -15,6 +18,7 @@ export default function transformer(file, api) {
   return root.toSource({quote: 'single'});
 
 
+  // global checks
   function importsAnythingFromFakerAlready(root) {
     return root
     .find(j.ImportDeclaration)
@@ -31,6 +35,8 @@ export default function transformer(file, api) {
     })
   };
 
+
+  // manipulations
   function findAndInsertFaker(root) {
     root
     .find(j.ImportSpecifier)
@@ -45,6 +51,15 @@ export default function transformer(file, api) {
     })
   }
 
+  function insertFakerAfterMirage(root) {
+    root
+      .find(j.ImportDeclaration)
+      .filter(path => {
+        return path.node.source.value === 'ember-cli-mirage'
+      })
+      .insertAfter(standardFakerImport());
+  }
+
   function removeOldFaker(root) {
     root
       .find(j.ImportSpecifier)
@@ -55,15 +70,8 @@ export default function transformer(file, api) {
       })
   }
 
-  function insertFakerAfterMirage(root) {
-    root
-      .find(j.ImportDeclaration)
-      .filter(path => {
-        return path.node.source.value === 'ember-cli-mirage'
-      })
-      .insertAfter(standardFakerImport());
-  }
 
+  // node generation
   function standardFakerImport() {
     return j.importDeclaration(
       [
@@ -73,6 +81,8 @@ export default function transformer(file, api) {
     );
   }
 
+
+  // node checks
   function isImportingFaker(path) {
     return path.node.imported.name === "faker"
   }
@@ -93,6 +103,8 @@ export default function transformer(file, api) {
     return path.node.specifiers.length === 1
   }
 
+
+  // general utility
   function removeSpecifierOrImportDeclaration(path) {
     if (isOnlySpecifierInImportDeclaration(path.parent)) {
       j(path.parent).remove(); // remove entire import declaration
