@@ -9,7 +9,11 @@ For more background on the situation, see [this github issue](https://github.com
 - Install `faker`
 - Run the codemod
   - If you find additional edge cases, please clone this repo and contribute :D
-  - Don't be afraid of codemods - check out the tutorial linked below :)
+  - Don't be afraid of codemods, check out Casey's [tutorial](https://caseywatts.com/2018/08/23/codemods.html)
+
+## How do codemods even?
+
+If this is your first codemod (it's mine!), [I wrote a lot about how I got up and running with codemods - check it out!](https://caseywatts.com/2018/08/23/codemods.html)
 
 
 ## Running the script
@@ -29,6 +33,4 @@ npm test
 npm run codemod path/to/directories/or/files/you/want
 ```
 
-## How to get started with codemods
-
-If this is your first codemod (it's mine!), [I wrote a lot about how I got up and running with codemods - check it out!](https://caseywatts.com/2018/08/23/codemods.html)
+Make sure to add test cases to the `__testfixtures__` (see the [tutorial](https://caseywatts.com/2018/08/23/codemods.html) for details).
