@@ -3,6 +3,15 @@ This codemod is to help transition from importing `faker` through `ember-cli-mir
 For more background on the situation, see [this github issue](https://github.com/samselikoff/ember-cli-mirage/issues/1037#issuecomment-411452618).
 
 
+## Removing Faker Dependency
+
+- Install `ember-auto-import`
+- Install `faker`
+- Run the codemod
+  - If you find additional edge cases, please clone this repo and contribute :D
+  - Don't be afraid of codemods - check out the tutorial linked below :)
+
+
 ## Running the script
 The example will run the codemod on all files in the `./tests` folder. Then selectively check in as many changes as you'd like to keep (try `git add -p`!).
 
