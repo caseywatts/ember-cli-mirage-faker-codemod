@@ -13,25 +13,19 @@ ember install ember-auto-import
 git add . && git commit -m "installing ember-auto-import package"
 ```
 
-add to your `ember-cli-build.js`:
-```
-    autoImport: {
-      alias: {
-        'faker': 'build/build/faker'
-      }
-    }
-```
-
-```
-git add . && git commit -m "telling ember-cli-build where to find faker"
-```
-
 ### Run the codemod
 This example will run the codemod on all files in the `./tests` folder. Then you can selectively check in as many changes as you'd like to keep (try `git add -p`!).
 
 ```
 npm install -g jscodeshift
 jscodeshift -t https://raw.githubusercontent.com/caseywatts/ember-cli-mirage-faker-codemod/master/transform.js ./tests
+```
+
+You might also be using faker in your `mirage` directory, so you can run it there as well:
+
+```
+npm install -g jscodeshift
+jscodeshift -t https://raw.githubusercontent.com/caseywatts/ember-cli-mirage-faker-codemod/master/transform.js ./mirage
 ```
 
 - If you find additional edge cases, please clone this repo and contribute :D

@@ -68,7 +68,7 @@ export default function transformer (file, api) {
   }
 
   function fakerSpecifier () {
-    return j.importSpecifier(j.identifier('faker'))
+    return j.importDefaultSpecifier(j.identifier('faker'))
   }
 
   // node checks - importSpecifierPath

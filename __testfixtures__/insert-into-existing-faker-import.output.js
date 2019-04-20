@@ -1,1 +1,1 @@
-import { x, faker } from 'faker';
+import faker, { x } from 'faker';

@@ -1,2 +1,2 @@
 import { x } from 'ember-cli-mirage';
-import { faker } from 'faker';
+import faker from 'faker';
