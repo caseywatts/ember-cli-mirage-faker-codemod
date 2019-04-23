@@ -1,4 +1,4 @@
-This codemod is to help transition from importing `faker` through `ember-cli-mirage`, to instead import it directly from `faker`.
+This codemod is to help transition from importing `faker` through `ember-cli-mirage`, to instead import it directly from `faker`. Thanks to @caseywatts for doing most of the work.
 
 For more background on the situation, see [this github issue](https://github.com/samselikoff/ember-cli-mirage/issues/1037#issuecomment-411452618).
 
@@ -18,14 +18,14 @@ This example will run the codemod on all files in the `./tests` folder. Then you
 
 ```
 npm install -g jscodeshift
-jscodeshift -t https://raw.githubusercontent.com/caseywatts/ember-cli-mirage-faker-codemod/master/transform.js ./tests
+jscodeshift -t https://raw.githubusercontent.com/samselikoff/ember-cli-mirage-faker-codemod/update-transform/transform.js ./tests
 ```
 
 You might also be using faker in your `mirage` directory, so you can run it there as well:
 
 ```
 npm install -g jscodeshift
-jscodeshift -t https://raw.githubusercontent.com/caseywatts/ember-cli-mirage-faker-codemod/master/transform.js ./mirage
+jscodeshift -t https://raw.githubusercontent.com/samselikoff/ember-cli-mirage-faker-codemod/update-transform/transform.js ./mirage
 ```
 
 - If you find additional edge cases, please clone this repo and contribute :D
