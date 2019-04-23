@@ -1,4 +1,4 @@
-export default function transformer (file, api) {
+module.exports = function transformer (file, api) {
   // setup
   const j = api.jscodeshift
   const root = j(file.source)
